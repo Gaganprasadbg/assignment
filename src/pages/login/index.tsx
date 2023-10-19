@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import LockOpenIcon from '@mui/icons-material/LockOpen';
+
 import { useRouter } from 'next/router';
 
 const Login = () => {
@@ -24,10 +24,10 @@ const handleLogin=()=>{
   return (
     <div style={{ backgroundColor: "#a895fd", height: "100vh" }}>
     <div className="mx-auto flex justify-center items-center h-full " style={{ margin: "0 auto", maxWidth: "1200px" }}>
-      <div className="flex flex-col justify-center items-center rounded-lg border-2 border-solid  w-[400px] gap-4 py-12 px-5 " style={{backgroundColor:"rgba(255, 255, 255, 0.1)"}}>
+      <div className="flex flex-col justify-center items-center rounded-lg border-2 border-solid  w-[400px] gap-4 py-12 px-5  m-6" style={{backgroundColor:"rgba(255, 255, 255, 0.1)"}}>
         <div className="flex flex-col w-full flex-auto max-w-lg gap-2">
             <div className='text-center'>
-                <LockOpenIcon/>
+               
             </div>
           <label htmlFor="email">Email</label>
           <input
