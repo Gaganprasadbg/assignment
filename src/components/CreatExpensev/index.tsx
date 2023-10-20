@@ -135,7 +135,7 @@ const {setExpenses ,editExpenseData,editEnable,editIndex,expenses,setEditEnable}
              
               value={expense?.dateOfExpenses}
               onChange={handleDateChange}
-              sx={{ marginBottom: 2, width: '100%' }}
+              sx={{ marginBottom: 2}}
             />
           </LocalizationProvider>
 

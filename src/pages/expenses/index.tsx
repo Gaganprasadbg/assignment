@@ -7,9 +7,9 @@ import dayjs from 'dayjs';
 
 const Expenses = () => {
   const [modalOpen,setIsModalOpen]=useState(false)
-  const [close,setClose]=useState(false)
   const {expenses,setEditExpenses,setEditEnable,setEditIndex,setExpenses}=useExpense()
-  
+  const [search ,setSearch]=useState('');
+  const [searchByDate ,setSearchDate]=useState('');
 
   const handelExpensiveModal=()=>{
     setIsModalOpen(true)
@@ -32,6 +32,7 @@ const handelDelete=(index:number)=>{
   setExpenses(deletedData);
 }
 
+
   return (
     <>
       <div className='mx-auto' style={{margin:"0 auto", maxWidth:"1200px"}}>
@@ -39,8 +40,8 @@ const handelDelete=(index:number)=>{
         <div className='flex justify-between flex-wrap'>
             <h1 className='font-bold text-lg py-2'>EXPENSE</h1>
             <div >
-                <input className='mx-4 p-2 border-2 border-solid' type="text" placeholder='Filter By Date' />
-                <input className='mr-4 p-2 border-2 border-solid' type="text" placeholder='Search By Name' />
+                <input className='mx-4 p-2 border-2 border-solid' value={searchByDate}  type="text" placeholder='Filter By Date'onChange={(e)=>setSearchDate(e.target.value)} />
+                <input className='mr-4 p-2 border-2 border-solid' value={search} type="text" placeholder='Search By Name' onChange={(e)=>setSearch(e.target.value)} />
 
                 <button className='px-4 py-2 rounded-lg' type='button' style={{backgroundColor:"#a895fd"}} onClick={handelExpensiveModal} >+ New Expense</button>
 
@@ -60,7 +61,9 @@ const handelDelete=(index:number)=>{
       </tr>
     </thead>
     <tbody>
-      {expenses.length>0 && expenses?.map((item:any,index:number)=>{
+      {expenses?.length>0 && expenses?.filter((item:any)=>{return search ? item.name.toLowerCase().includes(search.toLowerCase()) : item })
+      .filter((date:any)=>{ return searchByDate ? date.dateOfExpenses ? dayjs(date.dateOfExpenses).format('YYYY-MM-DD').toLowerCase().includes(searchByDate.toLowerCase()) : date:date})
+      . map((item:any,index:number)=>{
           return(
            <tr className='border-collapse border-2 border-solid hover:bg-[#d8d6e3]' key={index}>
              <td className='border-b  border-slate-400' >{item.name}</td>
