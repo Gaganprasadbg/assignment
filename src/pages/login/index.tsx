@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 
 const Login = () => {
-const [user ,setUser]=useState([{}])
+  const [user, setUser] = useState({
+    email: '', 
+    password: '', 
+  });
 const router = useRouter()
 const handelOnChange=(e:any)=>{
   
@@ -17,8 +20,9 @@ const handelOnChange=(e:any)=>{
 }
 
 const handleLogin=()=>{
+  if(user.email && user.password){
    router.push('/expenses')
-    
+  }
 }
   return (
     <div style={{ backgroundColor: "#a895fd", height: "100vh" }}>
