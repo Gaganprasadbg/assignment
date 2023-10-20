@@ -27,9 +27,8 @@ const handelEdit=(item:any,index:number)=>{
  setEditIndex(index)
 }
 const handelDelete=(index:number)=>{
-  const DeleteData=[...expenses]
-  const deletedData=DeleteData.splice(index,0)
-  setExpenses(deletedData);
+  const updatedExpenses = expenses.filter((_: any, i: number) => i !== index);
+  setExpenses(updatedExpenses);
 }
 
 
