@@ -1,9 +1,15 @@
 import CreateExpense from '@/components/CreatExpensev'
 import React, { useState } from 'react'
+import DeleteIcon from '@mui/icons-material/Delete';
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+import { useExpense } from '@/utilities/expensesContext';
+import dayjs from 'dayjs';
 
 const Expenses = () => {
   const [modalOpen,setIsModalOpen]=useState(false)
- const [close,setClose]=useState(false)
+  const [close,setClose]=useState(false)
+  const {expenses,setEditExpenses,setEditEnable,setEditIndex,setExpenses}=useExpense()
+  
 
   const handelExpensiveModal=()=>{
     setIsModalOpen(true)
@@ -11,48 +17,26 @@ const Expenses = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-  const tableData = [
-    {
-      Name: "Gagan",
-      Category: "Category 1",
-      DateOfExpenses: "12/12/12",
-      Amount: "108",
-      UpdatedDate: "12/12/12",
-      CreatedDate: "10/10/10",
-    },
-    {
-      Name: "John",
-      Category: "Category 2",
-      DateOfExpenses: "12/12/12",
-      Amount: "108",
-      UpdatedDate: "12/12/12",
-      CreatedDate: "10/10/10",
-    },
-   
-    {
-      Name: "Alice",
-      Category: "Category 3",
-      DateOfExpenses: "11/11/11",
-      Amount: "$50",
-      UpdatedDate: "12/12/12",
-      CreatedDate: "10/10/10",
-    },
-    {
-      Name: "Bob",
-      Category: "Category 4",
-      DateOfExpenses: "10/10/10",
-      Amount: "$75",
-      UpdatedDate: "11/11/11",
-      CreatedDate: "09/09/09",
-    },
-    // Add as many objects as needed
-  ];
+
+const handelEdit=(item:any,index:number)=>{
+  setIsModalOpen(true);
+ const data =[...expenses]
+ const editData=data[index]
+ setEditExpenses(editData)
+ setEditEnable(true)
+ setEditIndex(index)
+}
+const handelDelete=(index:number)=>{
+  const DeleteData=[...expenses]
+  const deletedData=DeleteData.splice(index,0)
+  setExpenses(deletedData);
+}
 
   return (
     <>
       <div className='mx-auto' style={{margin:"0 auto", maxWidth:"1200px"}}>
         <div className='p-12 border-2 border-solid mt-4 rounded-lg'>
-        <div className='flex justify-between'>
+        <div className='flex justify-between flex-wrap'>
             <h1 className='font-bold text-lg py-2'>EXPENSE</h1>
             <div >
                 <input className='mx-4 p-2 border-2 border-solid' type="text" placeholder='Filter By Date' />
@@ -62,7 +46,7 @@ const Expenses = () => {
 
             </div>
         </div>
-        <div className='min-w-full  mt-4 overflow-x-auto'>
+        <div className='min-w-full  mt-4 overflow-x-auto lg:overflow-x-hidden'>
   <table className='border border-black rounded-lg table-fixed md:table-fixed  border-separate'>
     <thead className='border-2 border-solid rounded-lg' >
       <tr>
@@ -71,24 +55,23 @@ const Expenses = () => {
         <th className='px-2 w-[200px] py-2 border border-slate-400'>Date Of Expenses</th>
         <th className='px-2 w-[200px] py-2 border border-slate-400'>Amount</th>
         <th className='px-2 w-[200px] py-2 border border-slate-400'>Updated Date</th>
-        <th className='px-2 w-[200px] py-2 border border-slate-400'>Created Date</th>
+        <th className='px-2 w-[200px] py-2 border border-slate-400'>Created By</th>
         <th className='px-2 w-[200px] py-2 border border-slate-400'>Action</th>
       </tr>
     </thead>
     <tbody>
-      
-        {tableData?.map((item,index)=>{
+      {expenses.length>0 && expenses?.map((item:any,index:number)=>{
           return(
-           <tr className='border-collapse border-2 border-solid'>
-             <td className='border border-slate-400' >{item.Name}</td>
-             <td className='border border-slate-400' >{item.Category}</td>
-             <td className='border border-slate-400' >{item.DateOfExpenses}</td>
-             <td className='border border-slate-400' >{item.Amount}</td>
-             <td className='border border-slate-400' >{item.UpdatedDate}</td>
-             <td className='border border-slate-400' >{item.CreatedDate}</td>
-              <td>
-               <button>Edit</button>
-                <button>Del</button>
+           <tr className='border-collapse border-2 border-solid hover:bg-[#d8d6e3]' key={index}>
+             <td className='border-b  border-slate-400' >{item.name}</td>
+             <td className='border-b border-l border-slate-400' >{item.category}</td>
+             <td className='border-b  border-l border-slate-400' >{item?.dateOfExpenses ? dayjs(item.dateOfExpenses).format('YYYY-MM-DD') : ''}</td>
+             <td className='border-b border-l border-slate-400' >{item.expensesAmount}</td>
+             <td className='border-b  border-l border-slate-400' >{item.updatedDate}</td>
+             <td className='border-b  border-l border-slate-400' >{item.CreatedBy}</td>
+              <td  className='border-b border-l border-slate-400'>
+               <button className='mr-4' onClick={()=>handelEdit(item,index)} ><DriveFileRenameOutlineIcon sx={{color:"#a895fd", fontSize:"50px"}} /></button>
+                <button onClick={()=>handelDelete(index)}><DeleteIcon sx={{ fontSize:"50px"}}/></button>
               </td>
 
 
@@ -96,11 +79,12 @@ const Expenses = () => {
           )
         })}
         
+        
     </tbody>
   </table>
 </div>
 <div>
-<CreateExpense open={modalOpen} onClose={handleCloseModal} />
+<CreateExpense open={modalOpen} onClose={handleCloseModal}    />
 </div>
 
         </div>
