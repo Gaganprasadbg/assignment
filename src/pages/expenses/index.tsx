@@ -4,13 +4,14 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import { useExpense } from '@/utilities/expensesContext';
 import dayjs from 'dayjs';
+import { Modal } from '@mui/material';
 
 const Expenses = () => {
   const [modalOpen,setIsModalOpen]=useState(false)
   const {expenses,setEditExpenses,setEditEnable,setEditIndex,setExpenses}=useExpense()
   const [search ,setSearch]=useState('');
   const [searchByDate ,setSearchDate]=useState('');
-
+  const [deleteModal ,setDeleteModal]=useState(false)
   const handelExpensiveModal=()=>{
     setIsModalOpen(true)
   }
@@ -26,9 +27,13 @@ const handelEdit=(item:any,index:number)=>{
  setEditEnable(true)
  setEditIndex(index)
 }
+const handelDeleteModal=()=>{
+  setDeleteModal(true)
+}
 const handelDelete=(index:number)=>{
   const updatedExpenses = expenses.filter((_: any, i: number) => i !== index);
   setExpenses(updatedExpenses);
+  setDeleteModal(false)
 }
 
 
@@ -73,9 +78,20 @@ const handelDelete=(index:number)=>{
              <td className='border-b  border-l border-slate-400' >{item.CreatedBy}</td>
               <td  className='border-b border-l border-slate-400'>
                <button className='mr-4' onClick={()=>handelEdit(item,index)} ><DriveFileRenameOutlineIcon sx={{color:"#a895fd", fontSize:"50px"}} /></button>
-                <button onClick={()=>handelDelete(index)}><DeleteIcon sx={{ fontSize:"50px"}}/></button>
+                <button onClick={handelDeleteModal}><DeleteIcon sx={{ fontSize:"50px"}}/></button>
               </td>
-
+<div>
+<Modal className='flex justify-center items-center ' open={deleteModal} > 
+<div className='p-12 rounded' style={{backgroundColor:"#ffffff", maxWidth:"300px"}} >
+  <p>Are Sure You Want Delete !!</p>
+  <div className='mt-4 flex justify-between'>
+  <button className='bg-[#a895fd] px-4 py-1 rounded'>!No</button>
+  <button className='bg-red-500 px-4 py-1 rounded' onClick={()=>handelDelete(index)}>Delete</button>
+  </div>
+  
+</div>
+        </Modal>
+</div>
 
           </tr>
           )
@@ -89,6 +105,9 @@ const handelDelete=(index:number)=>{
 <CreateExpense open={modalOpen} onClose={handleCloseModal}    />
 </div>
 
+        </div>
+        <div>
+       
         </div>
         
       </div>
